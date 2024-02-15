@@ -32,9 +32,9 @@ https://github.com/Intro-CompuMovil/Explive
 
 ## APIs y Dependencias
 
-Spotify API: Para listar música relacionada con eventos y crear playlists.
-Google Maps API: Para servicios de mapas y navegación.
-Booking.com API: Para buscar y reservar alojamiento.
+- Spotify API: Para listar música relacionada con eventos y crear playlists.
+- Google Maps API: Para servicios de mapas y navegación.
+- Booking.com API: Para buscar y reservar alojamiento.
 
 ## Contacto
 
