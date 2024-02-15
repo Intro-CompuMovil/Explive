@@ -30,7 +30,7 @@ Explive es una aplicación móvil para Android que transforma la experiencia asi
 
 https://github.com/Intro-CompuMovil/Explive
 
-##APIs y Dependencias
+## APIs y Dependencias
 
 Spotify API: Para listar música relacionada con eventos y crear playlists.
 Google Maps API: Para servicios de mapas y navegación.
