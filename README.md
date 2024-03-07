@@ -1,5 +1,8 @@
 # Explive
 
+![LExplive](https://github.com/Intro-CompuMovil/Explive/assets/116745500/a2987271-ed29-4127-9ff0-1ce08aec749f)
+
+
 ## Índice
 
 - [Introducción](#introducción)
