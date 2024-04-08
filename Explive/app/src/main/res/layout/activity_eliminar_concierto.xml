@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width= "match_parent"
+    android:layout_height= "match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/fondoexplive"
+        android:scaleType="centerCrop" ></ImageView>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Explive"
+            android:fontFamily="@font/montserratb"
+            android:textSize="40sp"
+            android:paddingTop="20dp"
+            android:layout_gravity="center"
+            ></TextView>
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:paddingTop="20dp"
+            app:srcCompat="@drawable/lexplive"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eliminar Concierto"
+            android:fontFamily="@font/montserratsemibold"
+            android:textSize="20sp"
+            android:paddingTop="20dp"
+            android:layout_gravity="center"
+            ></TextView>
+
+        <!-- EditText para el usuario -->
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/edittext_background"
+            />
+
+        <!-- Botón para iniciar sesión -->
+        <Button
+            android:id="@+id/eliminar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eliminar"
+            android:layout_below="@id/forgot_password"
+            android:layout_marginTop="15dp"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:fontFamily="@font/montserratsemibold"
+            android:layout_gravity="center"
+            android:background="@drawable/buttonbackground"/>
+    </LinearLayout>
+
+</FrameLayout>
