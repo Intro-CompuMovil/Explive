@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width= "match_parent"
-    android:layout_height= "match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/fondoexplive"
-        android:scaleType="centerCrop" ></ImageView>
+        android:scaleType="centerCrop" >
+    </ImageView>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -26,9 +28,7 @@
             android:fontFamily="@font/montserratb"
             android:textSize="40sp"
             android:paddingTop="20dp"
-            android:layout_gravity="center"
-            ></TextView>
-
+            android:layout_gravity="center"/>
 
         <ImageView
             android:id="@+id/imageView2"
@@ -38,38 +38,102 @@
             app:srcCompat="@drawable/lexplive"
             android:layout_gravity="center"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Eliminar Concierto"
-            android:fontFamily="@font/montserratsemibold"
-            android:textSize="20sp"
-            android:paddingTop="20dp"
-            android:layout_gravity="center"
-            ></TextView>
-
-        <!-- EditText para el usuario -->
         <Spinner
             android:id="@+id/spinner"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/edittext_background"
-            />
+            android:background="@drawable/edittext_background"/>
 
-        <!-- Botón para iniciar sesión -->
         <Button
             android:id="@+id/eliminar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Eliminar"
-            android:layout_below="@id/forgot_password"
             android:layout_marginTop="15dp"
             android:textColor="#FFFFFF"
             android:padding="12dp"
             android:fontFamily="@font/montserratsemibold"
             android:layout_gravity="center"
             android:background="@drawable/buttonbackground"/>
-    </LinearLayout>
 
+        <!-- Nuevo LinearLayout para acomodar los TextViews en dos filas -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
+
+            <!-- Primera fila de TextViews -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:fontFamily="@font/montserratsemibold"
+                    android:textSize="20sp"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:paddingEnd="15dp"
+                    android:id="@+id/fechaConcierto"
+                    android:layout_weight="0.5"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:fontFamily="@font/montserratsemibold"
+                    android:textSize="20sp"
+                    android:padding="10dp"
+                    android:paddingStart="15dp"
+                    android:gravity="center"
+                    android:id="@+id/ciudadConcierto"
+                    android:layout_weight="0.5"
+                    />
+            </LinearLayout>
+
+            <!-- Segunda fila de TextViews -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:paddingTop="30dp"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:fontFamily="@font/montserratsemibold"
+                    android:textSize="20sp"
+                    android:padding="10dp"
+                    android:paddingEnd="15dp"
+                    android:gravity="center"
+                    android:id="@+id/lugarConcierto"
+                    android:layout_weight="0.5"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:fontFamily="@font/montserratsemibold"
+                    android:textSize="20sp"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:paddingStart="15dp"
+                    android:id="@+id/horaConcierto"
+                    android:layout_weight="0.5"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 </FrameLayout>
