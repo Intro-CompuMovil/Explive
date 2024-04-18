@@ -1,5 +1,6 @@
 package com.example.proyectoentrega1
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -44,27 +45,35 @@ class MainActivity : AppCompatActivity() {
         buttonIngresar.setOnClickListener {
             val usuario = editTextUsuario.text.toString()
             val contrasena = editTextContrasena.text.toString()
+
             if (autenticarUsuario(usuario, contrasena)) {
                 Log.i("MainActivity", "Usuario autenticado")
-                val intent = Intent(this, Menu::class.java)
-                intent.putExtra("conciertos", conciertos.toString())
-
                 val nombreUsuario = obtenerNombreUsuario(usuario)
+                guardarUsuarioSesion(usuario, nombreUsuario, "user")
 
-                intent.putExtra("nombreUsuario", nombreUsuario)
+                val intent = Intent(this, Menu::class.java).apply {
+                    putExtra("conciertos", conciertos.toString())
+                    putExtra("nombreUsuario", nombreUsuario)
+                }
                 startActivity(intent)
-
-                startActivity(intent)
-            }
-            else if(autenticarAdmin(usuario,contrasena)){
+            } else if(autenticarAdmin(usuario,contrasena)){
                 Log.i("MainActivity", "Admin autenticado")
                 val intent = Intent(this, MenuAdmin::class.java)
                 intent.putExtra("conciertos", conciertos.toString())
                 startActivity(intent)
-            }
-            else{
+            } else {
                 Toast.makeText(this, "Error autenticado credenciales", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun guardarUsuarioSesion(usuario: String, nombre: String, rol: String) {
+        val prefs = getSharedPreferences("prefs_usuarios", Context.MODE_PRIVATE)
+        with(prefs.edit()) {
+            putString("Correo electrónico", usuario)
+            putString("Nombre", nombre)
+            putString("Rol", rol)
+            apply()
         }
     }
 
