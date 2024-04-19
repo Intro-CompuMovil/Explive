@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProyectoEntrega1</string>
+    <string name="app_name">Explive</string>
     <string name="title_activity_momentos">Momentos</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -44,4 +44,6 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="title_activity_agregar_concierto">AgregarConcierto</string>
+    <string name="title_activity_mapasito">Mapasito</string>
+    <string name="title_activity_mapasitio">Mapasitio</string>
 </resources>

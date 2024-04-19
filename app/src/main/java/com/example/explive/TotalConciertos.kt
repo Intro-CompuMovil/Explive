@@ -1,4 +1,4 @@
-package com.example.proyectoentrega1
+package com.example.explive
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,8 +7,6 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import org.json.JSONArray
 
 class TotalConciertos : AppCompatActivity() {

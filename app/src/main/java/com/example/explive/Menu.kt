@@ -1,25 +1,14 @@
-package com.example.proyectoentrega1
+package com.example.explive
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import org.json.JSONArray
-import org.json.JSONException
-import java.io.IOException
-import android.content.pm.PackageManager
-import android.database.Cursor
-import android.graphics.Color
-import android.provider.ContactsContract
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 
 class Menu : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

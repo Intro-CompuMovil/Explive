@@ -1,11 +1,8 @@
-package com.example.proyectoentrega1
+package com.example.explive
 
 import android.os.Bundle
 import android.webkit.WebView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class LinkConcierto : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

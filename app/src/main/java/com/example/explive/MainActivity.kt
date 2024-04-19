@@ -1,10 +1,11 @@
-package com.example.proyectoentrega1
+package com.example.explive
 
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -31,6 +32,24 @@ class MainActivity : AppCompatActivity() {
 
         cargarJSONConciertos()
         cargarJSONUsuarios()
+
+        editTextUsuario.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                editTextContrasena.requestFocus()
+                true
+            } else {
+                false
+            }
+        }
+
+        editTextContrasena.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                buttonIngresar.performClick()
+                true
+            } else {
+                false
+            }
+        }
 
         buttonNotRegistered.setOnClickListener {
             val intent = Intent(this, Registro::class.java)

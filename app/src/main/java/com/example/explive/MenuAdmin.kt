@@ -1,4 +1,4 @@
-package com.example.proyectoentrega1
+package com.example.explive
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

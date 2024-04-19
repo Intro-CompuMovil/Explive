@@ -1,20 +1,48 @@
-package com.example.proyectoentrega1
+package com.example.explive
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import org.json.JSONObject
 import java.io.IOException
 
 class PerfilUsuario : AppCompatActivity() {
+
+    private lateinit var imageView: ImageView
+
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            imageView.setImageURI(uri)
+        }
+    }
+
+    private val takePicturePreview = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+        bitmap?.let {
+            imageView.setImageBitmap(bitmap)
+        }
+    }
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_perfil_usuario)
+
+        imageView = findViewById<ImageView>(R.id.fperfil)
+        val btnGaleria = findViewById<Button>(R.id.btngaleria)
+        val btnCamara = findViewById<Button>(R.id.btncamara)
+
 
         val nombreA = findViewById<TextView>(R.id.textViewNombre)
         val ciudadA = findViewById<TextView>(R.id.textViewCiudad)
@@ -34,6 +62,38 @@ class PerfilUsuario : AppCompatActivity() {
                 ciudadA.text = listaUsuarios[i].ciudadResidencia
                 correoA.text = listaUsuarios[i].correoElectronico
             }
+        }
+
+        btnGaleria.setOnClickListener {
+            getContent.launch("image/*")
+        }
+
+        btnCamara.setOnClickListener {
+            requestCamera()
+        }
+    }
+
+    private fun requestCamera() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this, android.Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // You can use the camera
+                takePicturePreview.launch(null)
+            }
+            else -> {
+                // Request camera permission
+                requestPermission.launch(android.Manifest.permission.CAMERA)
+            }
+        }
+    }
+
+    private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            // Permission is granted, you can take a picture
+            takePicturePreview.launch(null)
+        } else {
+            // Permission is denied, show a message to the user
         }
     }
 

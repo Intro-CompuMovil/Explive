@@ -1,4 +1,4 @@
-package com.example.proyectoentrega1
+package com.example.explive
 
 
 import android.Manifest
@@ -13,7 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.proyectoentrega1.databinding.ActivityMomentosBinding
+import com.example.explive.databinding.ActivityMomentosBinding
 import org.json.JSONObject
 
 class detallesConcierto : AppCompatActivity() {
@@ -56,7 +56,9 @@ class detallesConcierto : AppCompatActivity() {
         }
 
         btnirSitio.setOnClickListener {
-            val intent = Intent(this, Sitio::class.java)
+            val intent = Intent(this, Mapasitio::class.java)
+            intent.putExtra("ciudad", ciudadConcierto.text.toString())
+            intent.putExtra("lugar", lugarConcierto.text.toString())
             startActivity(intent)
         }
 

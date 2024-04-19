@@ -1,4 +1,4 @@
-package com.example.proyectoentrega1
+package com.example.explive
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.proyectoentrega1.databinding.FragmentFirst2Binding
+import com.example.explive.databinding.FragmentFirst2Binding
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.

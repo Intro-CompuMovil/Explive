@@ -59,7 +59,10 @@
             android:padding="12dp"
             android:fontFamily="@font/montserratsemibold"
             android:background="@drawable/edittext_background"
-            android:textColor="@color/purple_Explive"/>
+            android:textColor="@color/purple_Explive"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            />
 
         <!-- TextView para el texto '¿No estás registrado?' -->
         <Button
@@ -85,7 +88,9 @@
             android:textColorHint="@color/purple_Explive"
             android:layout_marginTop="16dp"
             android:background="@drawable/edittext_background"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:imeOptions="actionGo"
+            />
 
         <!-- TextView para el texto '¿Olvidaste tu contraseña?' -->
         <Button
