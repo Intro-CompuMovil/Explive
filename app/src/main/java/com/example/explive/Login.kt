@@ -5,9 +5,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import com.example.explive.databinding.ActivityMainBinding
+import com.example.explive.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -18,17 +19,17 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 
-class MainActivity : AppCompatActivity() {
+class Login : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
 
         enableEdgeToEdge()
         setContentView(binding.root)
@@ -48,6 +49,17 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, Registro::class.java)
             startActivity(intent)
         }
+
+        binding.password.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val email = binding.username.text.toString()
+                val password = binding.password.text.toString()
+                signInUser(email, password)
+                true
+            } else {
+                false
+            }
+        }
     }
 
     override fun onStart() {
@@ -66,21 +78,21 @@ class MainActivity : AppCompatActivity() {
                     val user = snapshot.getValue(User::class.java)
                     if (user != null) {
                         if (user.admin) {
-                            val intent = Intent(this@MainActivity, MenuAdmin::class.java)
+                            val intent = Intent(this@Login, MenuAdmin::class.java)
                             intent.putExtra("user", user)
                             startActivity(intent)
                         } else {
-                            val intent = Intent(this@MainActivity, Menu::class.java)
+                            val intent = Intent(this@Login, Menu::class.java)
                             intent.putExtra("user", user)
                             startActivity(intent)
                         }
                     } else {
-                        Toast.makeText(this@MainActivity, "User data not found", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@Login, "User data not found", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@MainActivity, "Failed to load user data: ${error.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Login, "Failed to load user data: ${error.message}", Toast.LENGTH_SHORT).show()
                 }
             })
         } else {

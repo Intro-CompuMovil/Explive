@@ -1,7 +1,6 @@
 package com.example.explive
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -19,8 +18,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import org.json.JSONObject
-import java.io.IOException
 
 class PerfilUsuario : AppCompatActivity() {
 
@@ -72,7 +69,7 @@ class PerfilUsuario : AppCompatActivity() {
 
         binding.btnLogout.setOnClickListener {
             auth.signOut()
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, Login::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()

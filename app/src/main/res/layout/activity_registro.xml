@@ -49,6 +49,7 @@
             android:hint="Nombre"
             android:fontFamily="@font/montserratsemibold"
             android:textColorHint="@color/purple_Explive"
+            android:textColor="@color/purple_Explive"
             android:background="@drawable/edittext_background"
             android:padding="10dp"
             android:layout_marginBottom="10dp" />
@@ -60,6 +61,7 @@
             android:hint="Apellido"
             android:fontFamily="@font/montserratsemibold"
             android:textColorHint="@color/purple_Explive"
+            android:textColor="@color/purple_Explive"
             android:background="@drawable/edittext_background"
             android:padding="10dp"
             android:layout_marginBottom="10dp" />
@@ -71,6 +73,7 @@
             android:hint="Ciudad de residencia"
             android:fontFamily="@font/montserratsemibold"
             android:textColorHint="@color/purple_Explive"
+            android:textColor="@color/purple_Explive"
             android:background="@drawable/edittext_background"
             android:padding="10dp"
             android:layout_marginBottom="10dp" />
@@ -82,6 +85,7 @@
             android:hint="Correo electrónico"
             android:fontFamily="@font/montserratsemibold"
             android:textColorHint="@color/purple_Explive"
+            android:textColor="@color/purple_Explive"
             android:background="@drawable/edittext_background"
             android:padding="10dp"
             android:layout_marginBottom="10dp" />
@@ -94,6 +98,7 @@
             android:hint="Contraseña"
             android:fontFamily="@font/montserratsemibold"
             android:textColorHint="@color/purple_Explive"
+            android:textColor="@color/purple_Explive"
             android:background="@drawable/edittext_background"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
