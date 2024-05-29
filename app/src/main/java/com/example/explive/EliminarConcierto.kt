@@ -1,82 +1,109 @@
 package com.example.explive
 
-import androidx.appcompat.app.AppCompatActivity
+import Concierto
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
-import org.json.JSONArray
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class EliminarConcierto : AppCompatActivity() {
+
+    private lateinit var database: DatabaseReference
+    private lateinit var spinner: Spinner
+    private lateinit var fechaConcierto: TextView
+    private lateinit var ciudadConcierto: TextView
+    private lateinit var lugarConcierto: TextView
+    private lateinit var horaConcierto: TextView
+    private lateinit var btnEliminarConcierto: Button
+
+    private val conciertosList = mutableListOf<Concierto>()
+    private val conciertosNames = mutableListOf<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_eliminar_concierto)
-        val conciertosString = intent.getStringExtra("conciertos")
-        val conciertosJSONarray = JSONArray(conciertosString)
-        //val conciertoString = intent.getStringExtra("concierto")
-        //val concierto = JSONObject(conciertoString)
-        val btnEliminarConcierto = findViewById<Button>(R.id.eliminar)
 
-        val fechaConcierto = findViewById<TextView>(R.id.fechaConcierto)
-        val ciudadConcierto = findViewById<TextView>(R.id.ciudadConcierto)
-        val lugarConcierto = findViewById<TextView>(R.id.lugarConcierto)
-        val horaConcierto = findViewById<TextView>(R.id.horaConcierto)
+        database = Firebase.database.reference.child("conciertos")
 
-        val conciertos = convertJsonArrayToList(conciertosJSONarray)
+        spinner = findViewById(R.id.spinner)
+        fechaConcierto = findViewById(R.id.fechaConcierto)
+        ciudadConcierto = findViewById(R.id.ciudadConcierto)
+        lugarConcierto = findViewById(R.id.lugarConcierto)
+        horaConcierto = findViewById(R.id.horaConcierto)
+        btnEliminarConcierto = findViewById(R.id.eliminar)
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, conciertos)
-
-
-        val spinner: Spinner = findViewById(R.id.spinner)
-        spinner.adapter = adapter
+        cargarConciertos()
 
         btnEliminarConcierto.setOnClickListener {
-            val conciertoSeleccionado = spinner.selectedItem.toString()
-            val concierto =
-                conciertosJSONarray.getJSONObject(conciertos.indexOf(conciertoSeleccionado))
-            conciertosJSONarray.remove(conciertos.indexOf(conciertoSeleccionado))
-            val intent = intent
-            intent.putExtra("conciertos", conciertosJSONarray.toString())
-            setResult(RESULT_OK, intent)
-            Toast.makeText(this, "Evento eliminado", Toast.LENGTH_SHORT).show()
+            val position = spinner.selectedItemPosition
+            if (position != AdapterView.INVALID_POSITION) {
+                val conciertoSeleccionado = conciertosList[position]
+                eliminarConcierto(conciertoSeleccionado)
+            } else {
+                Toast.makeText(this, "Por favor, seleccione un concierto", Toast.LENGTH_SHORT).show()
+            }
         }
+    }
 
-        val adapter2 = ArrayAdapter(this, android.R.layout.simple_spinner_item, conciertos)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+    private fun cargarConciertos() {
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                conciertosList.clear()
+                conciertosNames.clear()
+                for (conciertoSnapshot in snapshot.children) {
+                    val concierto = conciertoSnapshot.getValue(Concierto::class.java)
+                    if (concierto != null) {
+                        conciertosList.add(concierto)
+                        conciertosNames.add("${concierto.artista} - ${concierto.ciudad}")
+                    }
+                }
+                val adapter = ArrayAdapter(this@EliminarConcierto, android.R.layout.simple_spinner_item, conciertosNames)
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.adapter = adapter
+            }
 
-        // Asignar el adaptador al Spinner
-        spinner.adapter = adapter2
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@EliminarConcierto, "Error al cargar los conciertos", Toast.LENGTH_SHORT).show()
+            }
+        })
 
-        // Establecer un listener para cuando un ítem es seleccionado
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                // Asumiendo que cada concierto en el JSONArray tiene los campos: fecha, ciudad, centro_de_eventos, hora, etc.
-                val selectedItem = parent.getItemAtPosition(position).toString()
-                val concierto = conciertosJSONarray.getJSONObject(position)
-
-                // Actualizar los TextViews con los datos del concierto seleccionado
-                fechaConcierto.text = concierto.getString("ciudad")
-                ciudadConcierto.text = concierto.getString("centro_de_eventos")
-                lugarConcierto.text = concierto.getString("fecha")
-                horaConcierto.text = "Hora: ${concierto.getString("hora")}"
+                val concierto = conciertosList[position]
+                fechaConcierto.text = concierto.fecha
+                ciudadConcierto.text = concierto.ciudad
+                lugarConcierto.text = concierto.centro_de_eventos
+                horaConcierto.text = "Hora: ${concierto.hora}"
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Este método se invoca cuando la selección desaparece de este view
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // No se seleccionó nada
             }
         }
+    }
 
+    private fun eliminarConcierto(concierto: Concierto) {
+        val conciertoRef = database.orderByChild("artista").equalTo(concierto.artista)
+        conciertoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (conciertoSnapshot in snapshot.children) {
+                    conciertoSnapshot.ref.removeValue().addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(this@EliminarConcierto, "Evento eliminado", Toast.LENGTH_SHORT).show()
+                            cargarConciertos()  // Recargar la lista de conciertos
+                        } else {
+                            Toast.makeText(this@EliminarConcierto, "Error al eliminar el evento: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@EliminarConcierto, "Error al acceder a la base de datos: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
-    }
-    fun convertJsonArrayToList(jsonArray: JSONArray): ArrayList<String> {
-        val listData = ArrayList<String>()
-        for (i in 0 until jsonArray.length()) {
-            val item = jsonArray.getJSONObject(i).getString("artista")
-            listData.add(item)
-        }
-        return listData
-    }
+}

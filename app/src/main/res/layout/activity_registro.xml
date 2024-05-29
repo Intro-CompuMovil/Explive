@@ -99,28 +99,10 @@
             android:layout_marginBottom="10dp"
              />
 
-        <EditText
-            android:hint="Repita la contraseña"
-            android:id="@+id/editTextText6"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:fontFamily="@font/montserratsemibold"
-            android:textColorHint="@color/purple_Explive"
-            android:background="@drawable/edittext_background"
-            android:padding="10dp"
-            android:layout_marginBottom="10dp"
-            />
-
         <Button
-            android:layout_marginTop="20dp"
-            android:id="@+id/button"
+            android:id="@+id/btnRegister"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Enviar"
-            android:fontFamily="@font/montserratsemibold"
-            android:textSize="20sp"
-            android:layout_gravity="center"
-            android:background="@drawable/buttonbackground"
-            />
+            android:layout_height="wrap_content"
+            android:text="Registrar"/>
     </LinearLayout>
 </FrameLayout>

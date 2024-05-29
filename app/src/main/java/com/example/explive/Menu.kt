@@ -32,7 +32,7 @@ class Menu : AppCompatActivity() {
 
         listaConciertos.setOnItemClickListener { parent, view, position, id ->
             val concierto = conciertos.getJSONObject(position)
-            val intent = Intent(this, detallesConcierto::class.java)
+            val intent = Intent(this, DetallesConcierto::class.java)
             intent.putExtra("concierto", concierto.toString())
             startActivity(intent)
         }

@@ -1,160 +1,120 @@
 package com.example.explive
 
-import android.content.Context
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
-import org.json.JSONArray
-import org.json.JSONObject
-import java.nio.charset.Charset
+import androidx.activity.enableEdgeToEdge
+import com.example.explive.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        var usuarios = JSONArray()
-        var conciertos = JSONArray()
-    }
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val editTextUsuario = findViewById<EditText>(R.id.username)
-        val editTextContrasena = findViewById<EditText>(R.id.password)
-        val buttonNotRegistered = findViewById<Button>(R.id.not_registered)
-        val buttonForgotpassword = findViewById<Button>(R.id.forgot_password)
-        val buttonIngresar = findViewById<Button>(R.id.login_button)
+        binding = ActivityMainBinding.inflate(layoutInflater)
 
-        cargarJSONConciertos()
-        cargarJSONUsuarios()
+        enableEdgeToEdge()
+        setContentView(binding.root)
 
-        editTextUsuario.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                editTextContrasena.requestFocus()
-                true
-            } else {
-                false
-            }
+        auth = Firebase.auth
+        database = Firebase.database.reference
+
+        binding.loginButton.setOnClickListener {
+            val email = binding.username.text.toString()
+            val password = binding.password.text.toString()
+            signInUser(email, password)
         }
 
-        editTextContrasena.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_GO) {
-                buttonIngresar.performClick()
-                true
-            } else {
-                false
-            }
-        }
+        binding.forgotPassword.setOnClickListener {}
 
-        buttonNotRegistered.setOnClickListener {
+        binding.notRegistered.setOnClickListener {
             val intent = Intent(this, Registro::class.java)
             startActivity(intent)
         }
+    }
 
-        buttonForgotpassword.setOnClickListener {
-            val intent = Intent(this, ContrasniaOlvidada::class.java)
-            startActivity(intent)
+    override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            updateUI(currentUser)
         }
+    }
 
-        buttonIngresar.setOnClickListener {
-            val usuario = editTextUsuario.text.toString()
-            val contrasena = editTextContrasena.text.toString()
-
-            if (autenticarUsuario(usuario, contrasena)) {
-                Log.i("MainActivity", "Usuario autenticado")
-                val nombreUsuario = obtenerNombreUsuario(usuario)
-                guardarUsuarioSesion(usuario, nombreUsuario, "user")
-
-                val intent = Intent(this, Menu::class.java).apply {
-                    putExtra("conciertos", conciertos.toString())
-                    putExtra("nombreUsuario", nombreUsuario)
+    private fun updateUI(currentUser: FirebaseUser?) {
+        if (currentUser != null) {
+            val userRef = database.child("users").child(currentUser.uid)
+            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user = snapshot.getValue(User::class.java)
+                    if (user != null) {
+                        if (user.admin) {
+                            val intent = Intent(this@MainActivity, MenuAdmin::class.java)
+                            intent.putExtra("user", user)
+                            startActivity(intent)
+                        } else {
+                            val intent = Intent(this@MainActivity, Menu::class.java)
+                            intent.putExtra("user", user)
+                            startActivity(intent)
+                        }
+                    } else {
+                        Toast.makeText(this@MainActivity, "User data not found", Toast.LENGTH_SHORT).show()
+                    }
                 }
-                startActivity(intent)
-            } else if(autenticarAdmin(usuario,contrasena)){
-                Log.i("MainActivity", "Admin autenticado")
-                val intent = Intent(this, MenuAdmin::class.java)
-                intent.putExtra("conciertos", conciertos.toString())
-                startActivity(intent)
-            } else {
-                Toast.makeText(this, "Error autenticado credenciales", Toast.LENGTH_SHORT).show()
-            }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@MainActivity, "Failed to load user data: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            binding.username.setText("")
+            binding.password.setText("")
         }
     }
 
-    private fun guardarUsuarioSesion(usuario: String, nombre: String, rol: String) {
-        val prefs = getSharedPreferences("prefs_usuarios", Context.MODE_PRIVATE)
-        with(prefs.edit()) {
-            putString("Correo electrónico", usuario)
-            putString("Nombre", nombre)
-            putString("Rol", rol)
-            apply()
-        }
-    }
 
-    private fun autenticarUsuario(usuario: String, contrasena: String): Boolean {
-        if(usuario.isEmpty() || contrasena.isEmpty()){
-            Log.i("MainActivity", "Usuario o contraseña vacios")
+    private fun isEmailValid(email: String): Boolean {
+        if (!email.contains("@") || !email.contains(".") || email.length < 5) {
             return false
         }
-        for (i in 0 until usuarios.length()) {
-            val usuarioJSON = usuarios.getJSONObject(i)
-            if (usuarioJSON.getString("Correo electrónico").equals(usuario) && usuarioJSON.getString("Contraseña").equals(contrasena) && usuarioJSON.getString("Rol").equals("user")) {
-                Log.i("MainActivity", "Entroooo")
-                return true
-            }
-        }
-        return false
+        return true
     }
 
-    private fun autenticarAdmin(usuario: String,contrasena: String):Boolean{
-        if(usuario.isEmpty() || contrasena.isEmpty()){
-            Log.i("MainActivity", "Usuario o contraseña vacios")
-            return false
+    private fun signInUser(email: String, password: String) {
+        if (isEmailValid(email)) {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI
+                        Log.d(TAG, "signInWithEmail:success:")
+                        val user = auth.currentUser
+                        updateUI(user)
+                    } else {
+                        Log.w(TAG, "signInWithEmail:failure", task.exception)
+                        Toast.makeText(
+                            this, "Authentication failed.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        updateUI(null)
+                    }
+                }
         }
-        for (i in 0 until usuarios.length()) {
-            val usuarioJSON = usuarios.getJSONObject(i)
-            if (usuarioJSON.getString("Correo electrónico").equals(usuario) && usuarioJSON.getString("Contraseña").equals(contrasena) && usuarioJSON.getString("Rol").equals("admin")) {
-                Log.i("MainActivity", "Entroooo")
-                return true
-            }
-        }
-        return false
-    }
-
-    private fun obtenerNombreUsuario(email: String): String {
-        for (i in 0 until usuarios.length()) {
-            val usuario = usuarios.getJSONObject(i)
-            if (usuario.getString("Correo electrónico") == email) {
-                // Asume que siempre encuentras el usuario y que el campo se llama "Nombre"
-                return usuario.getString("Nombre")
-            }
-        }
-        return "Usuario"
-    }
-
-    private fun cargarJSONConciertos() {
-        val inputStream = assets.open("conciertos_colombia.json")
-        val size = inputStream.available()
-        val buffer = ByteArray(size)
-        inputStream.read(buffer)
-        inputStream.close()
-        val json = String(buffer, Charset.defaultCharset())
-        val jsonObject = JSONObject(json)
-        conciertos = jsonObject.getJSONArray("conciertos")
-    }
-    private fun cargarJSONUsuarios() {
-        val inputStream = assets.open("usuarios.json")
-        val size = inputStream.available()
-        val buffer = ByteArray(size)
-        inputStream.read(buffer)
-        inputStream.close()
-        val json = String(buffer, Charset.defaultCharset())
-        val jsonObject = JSONObject(json)
-        usuarios = jsonObject.getJSONArray("usuarios")
     }
 }

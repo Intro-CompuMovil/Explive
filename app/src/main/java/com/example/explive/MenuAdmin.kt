@@ -1,27 +1,37 @@
 package com.example.explive
 
+import Concierto
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
-import org.json.JSONArray
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 class MenuAdmin : AppCompatActivity() {
+
+    private lateinit var database: DatabaseReference
+    private lateinit var adapter: ArrayAdapter<String>
+    private val nombresConciertos = mutableListOf<String>()
+    private val conciertosMap = mutableMapOf<Int, Concierto>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu_admin)
 
+        database = FirebaseDatabase.getInstance().reference.child("conciertos")
+
         val listaConciertos = findViewById<ListView>(R.id.listViewAdmon)
         val btnAgregar = findViewById<Button>(R.id.btnAgregar)
         val btnEliminar = findViewById<Button>(R.id.btnEliminar)
-        val conciertosString = intent.getStringExtra("conciertos")
-        val conciertos = JSONArray(conciertosString)
+        val btnCerrarSesion = findViewById<Button>(R.id.btnCerrarSesion)
 
-        val nombresConciertos = obtenerNombresConciertos(conciertos)
+        var auth = FirebaseAuth.getInstance()
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, nombresConciertos)
+        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, nombresConciertos)
         listaConciertos.adapter = adapter
 
         btnAgregar.setOnClickListener {
@@ -31,25 +41,45 @@ class MenuAdmin : AppCompatActivity() {
 
         btnEliminar.setOnClickListener {
             val intent = Intent(this, EliminarConcierto::class.java)
-            intent.putExtra("conciertos", conciertosString)
             startActivity(intent)
         }
-
-        val intent = Intent(this, detallesConcierto::class.java)
 
         listaConciertos.setOnItemClickListener { parent, view, position, id ->
-            val concierto = conciertos.getJSONObject(position)
-            intent.putExtra("concierto", concierto.toString())
+            val conciertoId = conciertosMap.keys.elementAt(position)
+            val concierto = conciertosMap[conciertoId]
+            val intent = Intent(this, DetallesConcierto::class.java)
+            intent.putExtra("concierto", concierto)
             startActivity(intent)
         }
+
+        btnCerrarSesion.setOnClickListener {
+            auth.signOut()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+
+        cargarConciertos()
     }
 
-    private fun obtenerNombresConciertos(destinos: JSONArray): MutableList<String> {
-        val nombresConciertos = mutableListOf<String>()
-        for (i in 0 until destinos.length()) {
-            val conciertos = destinos.getJSONObject(i)
-            nombresConciertos.add(conciertos.getString("artista") + " " + conciertos.getString("ciudad"))
-        }
-        return nombresConciertos
+    private fun cargarConciertos() {
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                nombresConciertos.clear()
+                conciertosMap.clear()
+                for (conciertoSnapshot in snapshot.children) {
+                    val id = conciertoSnapshot.key?.toIntOrNull() ?: continue
+                    val concierto = conciertoSnapshot.getValue(Concierto::class.java) ?: continue
+                    conciertosMap[id] = concierto
+                    nombresConciertos.add("${concierto.artista} - ${concierto.ciudad}")
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@MenuAdmin, "Error al cargar conciertos: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

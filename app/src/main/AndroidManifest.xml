@@ -69,7 +69,7 @@
             android:label="@string/title_activity_momentos"
             android:theme="@style/Theme.ProyectoEntrega1" />
         <activity
-            android:name=".detallesConcierto"
+            android:name=".DetallesConcierto"
             android:exported="false" />
         <activity
             android:name=".Menu"
