@@ -39,6 +39,7 @@ class TotalConciertos : AppCompatActivity() {
         listaConciertos.setOnItemClickListener { parent, view, position, id ->
             val concierto = conciertosList[position]
             val intent = Intent(this, DetallesConcierto::class.java)
+            intent.putExtra("id", (position+1).toString())
             intent.putExtra("concierto", concierto)
             startActivity(intent)
         }

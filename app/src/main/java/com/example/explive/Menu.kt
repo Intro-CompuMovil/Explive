@@ -34,6 +34,7 @@ class Menu : AppCompatActivity() {
             val concierto = conciertos.getJSONObject(position)
             val intent = Intent(this, DetallesConcierto::class.java)
             intent.putExtra("concierto", concierto.toString())
+            intent.putExtra("id", position)
             startActivity(intent)
         }
 

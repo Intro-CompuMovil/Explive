@@ -1,15 +1,19 @@
 package com.example.explive
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.example.explive.databinding.ActivityPerfilUsuarioBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -18,6 +22,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 
 class PerfilUsuario : AppCompatActivity() {
 
@@ -28,12 +34,15 @@ class PerfilUsuario : AppCompatActivity() {
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             binding.fperfil.setImageURI(uri)
+            uploadImageToStorage(uri)
         }
     }
 
     private val takePicturePreview = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
         bitmap?.let {
             binding.fperfil.setImageBitmap(bitmap)
+            val uri = getImageUri(bitmap)
+            uploadImageToStorage(uri)
         }
     }
 
@@ -49,15 +58,11 @@ class PerfilUsuario : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
 
-
         val currentUser = auth.currentUser
-
-
 
         if (currentUser != null) {
             loadUserProfile(currentUser.uid)
         }
-
 
         binding.btngaleria.setOnClickListener {
             getContent.launch("image/*")
@@ -85,6 +90,11 @@ class PerfilUsuario : AppCompatActivity() {
                     binding.textViewNombre.text = user.name
                     binding.textViewCiudad.text = user.city
                     binding.textViewCorreo.text = user.email
+                    user.photoUrl?.let { url ->
+                        Glide.with(this@PerfilUsuario)
+                            .load(url)
+                            .into(binding.fperfil)
+                    }
                 } else {
                     Toast.makeText(this@PerfilUsuario, "User data not found", Toast.LENGTH_SHORT).show()
                 }
@@ -94,6 +104,37 @@ class PerfilUsuario : AppCompatActivity() {
                 Toast.makeText(this@PerfilUsuario, "Failed to load user data: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun uploadImageToStorage(uri: Uri) {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            val storageReference = FirebaseStorage.getInstance().reference
+            val photoRef = storageReference.child("Users/${currentUser.uid}/photo.jpg")
+            val uploadTask = photoRef.putFile(uri)
+
+            uploadTask.addOnSuccessListener {
+                photoRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                    savePhotoUrlToDatabase(currentUser.uid, downloadUri.toString())
+                }
+            }.addOnFailureListener {
+                Toast.makeText(this, "Failed to upload image: ${it.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun savePhotoUrlToDatabase(uid: String, url: String) {
+        val userRef = database.child("users").child(uid)
+        userRef.child("photoUrl").setValue(url).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(this, "Photo URL saved successfully", Toast.LENGTH_SHORT).show()
+                Glide.with(this)
+                    .load(url)
+                    .into(binding.fperfil)
+            } else {
+                Toast.makeText(this, "Failed to save photo URL: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun requestCamera() {
@@ -117,4 +158,10 @@ class PerfilUsuario : AppCompatActivity() {
         }
     }
 
+    private fun getImageUri(bitmap: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(contentResolver, bitmap, "Title", null)
+        return Uri.parse(path)
+    }
 }

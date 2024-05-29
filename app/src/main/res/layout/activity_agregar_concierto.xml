@@ -96,6 +96,26 @@
             android:layout_marginBottom="10dp"
             />
 
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:contentDescription="Imagen del concierto" />
+
+        <Button
+            android:id="@+id/btnSelectImage"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Seleccionar Imagen"
+            android:layout_gravity="center"
+            android:background="@drawable/buttonbackground"
+            android:fontFamily="@font/montserratsemibold"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp" />
+
         <Button
             android:layout_marginTop="20dp"
             android:id="@+id/btnAgregar"

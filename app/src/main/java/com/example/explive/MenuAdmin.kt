@@ -4,8 +4,10 @@ import Concierto
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -27,7 +29,7 @@ class MenuAdmin : AppCompatActivity() {
         val listaConciertos = findViewById<ListView>(R.id.listViewAdmon)
         val btnAgregar = findViewById<Button>(R.id.btnAgregar)
         val btnEliminar = findViewById<Button>(R.id.btnEliminar)
-        val btnCerrarSesion = findViewById<Button>(R.id.btnCerrarSesion)
+        val btnCerrarSesion = findViewById<ImageButton>(R.id.btnCerrarSesion)
 
         var auth = FirebaseAuth.getInstance()
 
@@ -48,6 +50,8 @@ class MenuAdmin : AppCompatActivity() {
             val conciertoId = conciertosMap.keys.elementAt(position)
             val concierto = conciertosMap[conciertoId]
             val intent = Intent(this, DetallesConcierto::class.java)
+            intent.putExtra("id", conciertoId.toString())
+            Log.d("MenuAdmin", "id: $conciertoId")
             intent.putExtra("concierto", concierto)
             startActivity(intent)
         }

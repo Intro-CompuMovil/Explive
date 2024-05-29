@@ -12,9 +12,10 @@ data class User (
     var email: String,
     var password: String,
     var city: String,
-    var admin: Boolean
-): Parcelable{
-    constructor() : this("","","","", "", "", false)
+    var admin: Boolean,
+    var photoUrl: String? = null
+): Parcelable {
+    constructor() : this("","","","", "", "", false, null)
     fun toMap(): Map<String, Any?> {
         return mapOf(
             "uid" to uid,
@@ -22,8 +23,8 @@ data class User (
             "email" to email,
             "password" to password,
             "city" to city,
-            "admin" to admin
+            "admin" to admin,
+            "photoUrl" to photoUrl
         )
     }
-
 }
