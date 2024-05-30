@@ -81,7 +81,7 @@ class Login : AppCompatActivity() {
                             intent.putExtra("user", user)
                             startActivity(intent)
                         } else {
-                            val intent = Intent(this@Login, Menu::class.java)
+                            val intent = Intent(this@Login, RedirectSpotify::class.java)
                             intent.putExtra("user", user)
                             startActivity(intent)
                         }

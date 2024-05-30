@@ -73,7 +73,7 @@ class Registro : AppCompatActivity() {
 
                     Toast.makeText(this, "createUserWithEmail:Success", Toast.LENGTH_SHORT).show()
 
-                    val intent = Intent(this, Menu::class.java)
+                    val intent = Intent(this, RedirectSpotify::class.java)
                     intent.putExtra("user", user)
                     startActivity(intent)
                 } else {

@@ -11,11 +11,12 @@ data class User (
     var lastname: String,
     var email: String,
     var password: String,
+    var tokenAPISPOTIFY: String? = null,
     var city: String,
     var admin: Boolean,
     var photoUrl: String? = null
 ): Parcelable {
-    constructor() : this("","","","", "", "", false, null)
+    constructor() : this("","","","","", "", "", false, null)
     fun toMap(): Map<String, Any?> {
         return mapOf(
             "uid" to uid,

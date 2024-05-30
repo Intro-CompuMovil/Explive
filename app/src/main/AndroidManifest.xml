@@ -5,8 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -23,7 +23,27 @@
         android:theme="@style/Theme.ProyectoEntrega1"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".RequestAPI"
+            android:exported="false" />
+        <activity
+            android:name=".RedirectSpotify"
+            android:exported="false" />
+        <activity
+            android:name=".Spotify"
+            android:exported="true"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="callback"
+                    android:scheme="myapp" />
+            </intent-filter>
+        </activity>
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -79,9 +99,6 @@
             android:exported="false" />
         <activity
             android:name=".Registro"
-            android:exported="false" />
-        <activity
-            android:name=".InicioSesion"
             android:exported="false" />
         <activity
             android:name=".Login"
