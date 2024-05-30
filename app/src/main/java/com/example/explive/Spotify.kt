@@ -1,7 +1,6 @@
 package com.example.explive
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -9,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
@@ -30,6 +32,35 @@ class Spotify : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
+        val currentUser = auth.currentUser
+        currentUser?.let {
+            val userId = it.uid
+            val userRef = database.child("users").child(userId).child("tokenAPISPOTIFY")
+            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val token = snapshot.getValue(String::class.java)
+                    if (token != null || token != "") {
+                        // El usuario ya tiene un token registrado, redirigir a la pantalla de menú
+                        val newIntent = Intent(this@Spotify, Menu::class.java)
+                        startActivity(newIntent)
+                        finish()
+                    } else {
+                        // No hay token, proceder con la autenticación de Spotify
+                        iniciarAutenticacionSpotify()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("Spotify", "Error al verificar el token: ${error.message}")
+                    iniciarAutenticacionSpotify()
+                }
+            })
+        } ?: run {
+            iniciarAutenticacionSpotify()
+        }
+    }
+
+    private fun iniciarAutenticacionSpotify() {
         val builder = AuthorizationRequest.Builder(CLIENT_ID, AuthorizationResponse.Type.TOKEN, REDIRECT_URI)
         builder.setScopes(arrayOf("user-top-read", "user-read-private", "user-read-email"))
         val request = builder.build()

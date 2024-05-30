@@ -35,6 +35,7 @@ class AgregarConcierto : AppCompatActivity() {
         val editTextCentroDeEventos = findViewById<EditText>(R.id.editTextText3)
         val editTextFecha = findViewById<EditText>(R.id.editTextText4)
         val editTextHora = findViewById<EditText>(R.id.editTextText5)
+        val editTextGenero = findViewById<EditText>(R.id.editTextGenero)
         val btnAgregar = findViewById<Button>(R.id.btnAgregar)
         val btnSelectImage = findViewById<Button>(R.id.btnSelectImage)
         imageView = findViewById(R.id.imageView)
@@ -52,12 +53,14 @@ class AgregarConcierto : AppCompatActivity() {
             val centroDeEventos = editTextCentroDeEventos.text.toString().trim()
             val fecha = editTextFecha.text.toString().trim()
             val hora = editTextHora.text.toString().trim()
+            val generoText = editTextGenero.text.toString().trim()
 
-            if (artista.isEmpty() || ciudad.isEmpty() || centroDeEventos.isEmpty() || fecha.isEmpty() || hora.isEmpty()) {
+            if (artista.isEmpty() || ciudad.isEmpty() || centroDeEventos.isEmpty() || fecha.isEmpty() || hora.isEmpty() || generoText.isEmpty()) {
                 Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
             } else {
-                val concierto = Concierto("",artista, ciudad, centroDeEventos, fecha, hora)
-                agregarConciertoAFirebase(concierto, editTextArtista, editTextCiudad, editTextCentroDeEventos, editTextFecha, editTextHora)
+                val generos = generoText.split("/").map { it.trim() }
+                val concierto = Concierto("", artista, ciudad, centroDeEventos, fecha, hora, generos)
+                agregarConciertoAFirebase(concierto, editTextArtista, editTextCiudad, editTextCentroDeEventos, editTextFecha, editTextHora, editTextGenero)
             }
         }
     }
@@ -86,7 +89,7 @@ class AgregarConcierto : AppCompatActivity() {
         }
     }
 
-    private fun agregarConciertoAFirebase(concierto: Concierto, editTextArtista: EditText, editTextCiudad: EditText, editTextCentroDeEventos: EditText, editTextFecha: EditText, editTextHora: EditText) {
+    private fun agregarConciertoAFirebase(concierto: Concierto, editTextArtista: EditText, editTextCiudad: EditText, editTextCentroDeEventos: EditText, editTextFecha: EditText, editTextHora: EditText, editTextGenero: EditText) {
         val conciertosRef = database.child("conciertos")
 
         conciertosRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -105,6 +108,7 @@ class AgregarConcierto : AppCompatActivity() {
                             editTextCentroDeEventos.text.clear()
                             editTextFecha.text.clear()
                             editTextHora.text.clear()
+                            editTextGenero.text.clear()
                             // Finalizar la actividad para volver a la pantalla anterior
                             finish()
                         } else {
