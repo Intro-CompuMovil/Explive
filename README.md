@@ -1,7 +1,6 @@
 # Explive
 
-![LExplive](https://github.com/Intro-CompuMovil/Explive/assets/116745500/a2987271-ed29-4127-9ff0-1ce08aec749f)
-
+<p align="center"><img src="https://github.com/Intro-CompuMovil/Explive/assets/116745500/a2987271-ed29-4127-9ff0-1ce08aec749f" width="200"></p>
 
 ## Índice
 
@@ -19,8 +18,8 @@ Explive es una aplicación móvil para Android que transforma la experiencia asi
 
 ## Funcionalidades
 
-- **Información de Eventos**: Busca eventos por artista, fecha y ubicación.
-- **Planificador de Rutas**: Obtén direcciones y tiempos de viaje hasta el lugar del evento.
+- **Información de Eventos**: Encuentra conciertos en toda Colombia basados en tus gustos de Spotify.
+- **Planificador de Rutas**: Obtén direcciones hasta el lugar del evento.
 - **Integraciones**: Spotify para playlists de eventos, Google Maps para navegación.
 
 ## Requisitos Previos
