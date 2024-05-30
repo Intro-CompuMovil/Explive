@@ -28,6 +28,7 @@ class Menu : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private val nombresConciertos = mutableListOf<String>()
     private val conciertosMap = mutableMapOf<Int, Concierto>()
+    private val recomendacionesList = mutableListOf<Concierto>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,11 +57,9 @@ class Menu : AppCompatActivity() {
         }
 
         binding.listView1.setOnItemClickListener { parent, view, position, id ->
-            val conciertoId = conciertosMap.keys.elementAt(position)
-            val concierto = conciertosMap[conciertoId]
+            val concierto = recomendacionesList[position]
             val intent = Intent(this, DetallesConcierto::class.java)
-            intent.putExtra("id", conciertoId.toString())
-            Log.d("Menu", "id: $conciertoId")
+            intent.putExtra("id", concierto.id)
             intent.putExtra("concierto", concierto)
             startActivity(intent)
         }
@@ -241,6 +240,9 @@ class Menu : AppCompatActivity() {
     }
 
     private fun actualizarListView(recomendaciones: List<Concierto>) {
+        recomendacionesList.clear()
+        recomendacionesList.addAll(recomendaciones)
+
         val nombresRecomendaciones = recomendaciones.map { "${it.artista} - ${it.ciudad}" }
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, nombresRecomendaciones)
         binding.listView1.adapter = adapter

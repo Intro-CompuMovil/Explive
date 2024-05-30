@@ -72,6 +72,14 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
+    implementation ("com.google.firebase:firebase-messaging:23.0.0")
+    implementation ("androidx.core:core:1.3.2")
+    implementation ("com.google.android.support:wearable:2.8.1")
+    implementation ("com.google.android.gms:play-services-wearable:17.0.0")
+
+    implementation("androidx.browser:browser:1.8.0")
+    implementation ("com.google.firebase:firebase-messaging:23.0.0")
+
     annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

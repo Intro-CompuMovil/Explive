@@ -46,4 +46,6 @@
     <string name="title_activity_agregar_concierto">AgregarConcierto</string>
     <string name="title_activity_mapasito">Mapasito</string>
     <string name="title_activity_mapasitio">Mapasitio</string>
+    <string name="channel_name">Notificaciones conciertos</string>
+    <string name="channel_description">Notificaciones para conciertos añadidos</string>
 </resources>

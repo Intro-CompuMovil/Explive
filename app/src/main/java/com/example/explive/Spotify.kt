@@ -39,7 +39,7 @@ class Spotify : AppCompatActivity() {
             userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val token = snapshot.getValue(String::class.java)
-                    if (token != null || token != "") {
+                    if (token != null && token != "") {
                         // El usuario ya tiene un token registrado, redirigir a la pantalla de menú
                         val newIntent = Intent(this@Spotify, Menu::class.java)
                         startActivity(newIntent)

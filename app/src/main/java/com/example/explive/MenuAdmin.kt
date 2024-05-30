@@ -49,6 +49,9 @@ class MenuAdmin : AppCompatActivity() {
         listaConciertos.setOnItemClickListener { parent, view, position, id ->
             val conciertoId = conciertosMap.keys.elementAt(position)
             val concierto = conciertosMap[conciertoId]
+            Log.d("Anterior", "concierto: ${conciertosMap[conciertoId]}")
+            Log.d("Actual", "id: $conciertoId")
+            Log.d("Siguiente", "concierto: ${conciertosMap[conciertoId + 1]}")
             val intent = Intent(this, DetallesConcierto::class.java)
             intent.putExtra("id", conciertoId.toString())
             Log.d("MenuAdmin", "id: $conciertoId")
