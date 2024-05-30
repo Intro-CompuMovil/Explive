@@ -29,7 +29,7 @@ class MenuAdmin : AppCompatActivity() {
         val listaConciertos = findViewById<ListView>(R.id.listViewAdmon)
         val btnAgregar = findViewById<Button>(R.id.btnAgregar)
         val btnEliminar = findViewById<Button>(R.id.btnEliminar)
-        val btnCerrarSesion = findViewById<ImageButton>(R.id.btnCerrarSesion)
+        val btnCerrarSesion = findViewById<Button>(R.id.btnCerrarSesion)
 
         var auth = FirebaseAuth.getInstance()
 

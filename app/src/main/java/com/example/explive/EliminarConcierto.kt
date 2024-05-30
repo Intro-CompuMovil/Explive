@@ -7,38 +7,30 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
+import com.example.explive.databinding.ActivityEliminarConciertoBinding
 import com.google.firebase.ktx.Firebase
 
 class EliminarConcierto : AppCompatActivity() {
 
     private lateinit var database: DatabaseReference
-    private lateinit var spinner: Spinner
-    private lateinit var fechaConcierto: TextView
-    private lateinit var ciudadConcierto: TextView
-    private lateinit var lugarConcierto: TextView
-    private lateinit var horaConcierto: TextView
-    private lateinit var btnEliminarConcierto: Button
+    private lateinit var binding: ActivityEliminarConciertoBinding
 
     private val conciertosList = mutableListOf<Concierto>()
     private val conciertosNames = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_eliminar_concierto)
+
+        // Configurar ViewBinding
+        binding = ActivityEliminarConciertoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         database = Firebase.database.reference.child("conciertos")
 
-        spinner = findViewById(R.id.spinner)
-        fechaConcierto = findViewById(R.id.fechaConcierto)
-        ciudadConcierto = findViewById(R.id.ciudadConcierto)
-        lugarConcierto = findViewById(R.id.lugarConcierto)
-        horaConcierto = findViewById(R.id.horaConcierto)
-        btnEliminarConcierto = findViewById(R.id.eliminar)
-
         cargarConciertos()
 
-        btnEliminarConcierto.setOnClickListener {
-            val position = spinner.selectedItemPosition
+        binding.eliminar.setOnClickListener {
+            val position = binding.spinner.selectedItemPosition
             if (position != AdapterView.INVALID_POSITION) {
                 val conciertoSeleccionado = conciertosList[position]
                 eliminarConcierto(conciertoSeleccionado)
@@ -60,9 +52,9 @@ class EliminarConcierto : AppCompatActivity() {
                         conciertosNames.add("${concierto.artista} - ${concierto.ciudad}")
                     }
                 }
-                val adapter = ArrayAdapter(this@EliminarConcierto, android.R.layout.simple_spinner_item, conciertosNames)
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinner.adapter = adapter
+                val adapter = ArrayAdapter(this@EliminarConcierto, R.layout.spinner_item, conciertosNames)
+                adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+                binding.spinner.adapter = adapter
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -70,13 +62,14 @@ class EliminarConcierto : AppCompatActivity() {
             }
         })
 
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val concierto = conciertosList[position]
-                fechaConcierto.text = concierto.fecha
-                ciudadConcierto.text = concierto.ciudad
-                lugarConcierto.text = concierto.centro_de_eventos
-                horaConcierto.text = "Hora: ${concierto.hora}"
+                binding.artista.text = concierto.artista
+                binding.fechaConcierto.text = concierto.fecha
+                binding.ciudadConcierto.text = concierto.ciudad
+                binding.lugarConcierto.text = concierto.centro_de_eventos
+                binding.horaConcierto.text = concierto.hora
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {

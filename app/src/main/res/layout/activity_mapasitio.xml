@@ -46,9 +46,9 @@
             android:id="@+id/sitiocomprabtn"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:text="Ir al sitio de compra"
+            android:text="Ir a la página de compra"
             android:layout_gravity="center"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:fontFamily="@font/montserratsemibold"
             android:layout_marginTop="25dp"/>
 

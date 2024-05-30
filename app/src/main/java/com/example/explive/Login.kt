@@ -43,7 +43,6 @@ class Login : AppCompatActivity() {
             signInUser(email, password)
         }
 
-        binding.forgotPassword.setOnClickListener {}
 
         binding.notRegistered.setOnClickListener {
             val intent = Intent(this, Registro::class.java)

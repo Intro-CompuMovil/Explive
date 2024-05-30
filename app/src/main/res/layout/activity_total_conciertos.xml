@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:padding="5dp"
     tools:context=".TotalConciertos">
 
     <ImageView
@@ -28,6 +28,7 @@
             android:fontFamily="@font/montserratb"
             android:text="¡Hola! {username}, estos son los conciertos sugeridos para ti:"
             android:textSize="22sp"
+            android:layout_marginTop="20dp"
             android:textStyle="bold" />
 
         <ListView

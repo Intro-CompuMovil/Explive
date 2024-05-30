@@ -34,7 +34,7 @@ class TotalConciertos : AppCompatActivity() {
         val nombreUsuario = intent.getStringExtra("nombreUsuario") ?: "Usuario"
 
         val textViewSaludo = findViewById<TextView>(R.id.eventTitle)
-        textViewSaludo.text = "Estos son los conciertos:"
+        textViewSaludo.text = "Estos son todos los conciertos disponibles:"
 
         listaConciertos.setOnItemClickListener { parent, view, position, id ->
             val concierto = conciertosList[position]
@@ -56,7 +56,7 @@ class TotalConciertos : AppCompatActivity() {
                     val concierto = conciertoSnapshot.getValue(Concierto::class.java)
                     if (concierto != null) {
                         conciertosList.add(concierto)
-                        nombresConciertos.add("${concierto.artista} ${concierto.ciudad}")
+                        nombresConciertos.add("${concierto.artista} - ${concierto.ciudad}")
                     }
                 }
                 adapter.notifyDataSetChanged()

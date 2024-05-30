@@ -57,7 +57,7 @@ class Mapasitio : AppCompatActivity(), OnMapReadyCallback {
 
     private var userLocationMarker: Marker? = null
 
-    private var pos = LatLng(0.0, 0.0)
+    private var pos = LatLng(4.6284875, -74.0646645)
 
     private var settingsOK = false
 
@@ -296,7 +296,7 @@ class Mapasitio : AppCompatActivity(), OnMapReadyCallback {
 
 
         val polylineoptions = PolylineOptions().addAll(latLNGRoute).color(Color.RED).width(10f)
-        mMap!!.addPolyline(polylineoptions)
+        mMap.addPolyline(polylineoptions)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -330,9 +330,7 @@ class Mapasitio : AppCompatActivity(), OnMapReadyCallback {
                 mMap.addMarker(MarkerOptions().position(latLng).title(lugar))
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
 
-                if (pos.latitude != 0.0 && pos.longitude != 0.0){
                     drawRouteCurrentlocationToTarget(pos, latLng)
-                }
 
 
             } else {

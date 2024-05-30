@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width= "match_parent"
     android:layout_height= "match_parent">
 
@@ -9,116 +11,129 @@
         android:src="@drawable/fondoexplive"
         android:scaleType="centerCrop" ></ImageView>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Login"
+        android:layout_gravity="center"
         android:orientation="vertical"
         android:padding="20dp"
-        android:layout_gravity="center">
+        tools:context=".Login">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Explive"
-            android:fontFamily="@font/montserratb"
-            android:textSize="40sp"
-            android:paddingTop="20dp"
             android:layout_gravity="center"
-            ></TextView>
+            android:fontFamily="@font/montserratb"
+            android:paddingTop="20dp"
+            android:text="Explive"
+            android:textSize="40sp">
+        </TextView>
 
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="250dp"
             android:layout_height="250dp"
+            android:layout_gravity="center"
             android:paddingTop="20dp"
-            app:srcCompat="@drawable/lexplive"
-            android:layout_gravity="center"/>
+            app:srcCompat="@drawable/lexplive" />
 
         <TextView
+            android:id="@+id/vlamusica"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vive la música"
-            android:fontFamily="@font/montserratsemibold"
-            android:textSize="20sp"
-            android:paddingTop="20dp"
             android:layout_gravity="center"
-            ></TextView>
+            android:fontFamily="@font/montserratsemibold"
+            android:paddingTop="20dp"
+            android:text="Vive la música"
+            android:textSize="20sp">
+
+        </TextView>
+
+
+        <me.biubiubiu.justifytext.library.JustifyTextView
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/montserratsemibold"
+            android:text="¡Bienvenido a Explive otra vez! por favor, inicia sesión o regístrate para continuar."
+            android:textSize="20sp"
+            android:layout_marginTop="50dp"
+            android:layout_below="@id/vlamusica"
+           />
+
 
         <!-- EditText para el usuario -->
         <EditText
             android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/purple_Explive"
-            android:hint="Correo"
-            android:layout_marginTop="20dp"
-            android:padding="12dp"
-            android:fontFamily="@font/montserratsemibold"
+            android:layout_marginTop="50dp"
             android:background="@drawable/edittext_background"
-            android:textColor="@color/purple_Explive"
+            android:fontFamily="@font/montserratsemibold"
+            android:hint="Correo"
             android:imeOptions="actionNext"
             android:inputType="text"
-            />
-
-        <!-- TextView para el texto '¿No estás registrado?' -->
-        <Button
-            android:id="@+id/not_registered"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/username"
-            android:layout_alignParentEnd="true"
-            android:text="¿No estás registrado?"
-            android:background="?android:attr/selectableItemBackground"
+            android:padding="12dp"
             android:textColor="@color/purple_Explive"
-            />
+            android:textColorHint="@color/purple_Explive" />
 
         <!-- EditText para la contraseña -->
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Contraseña"
-            android:layout_below="@id/not_registered"
-            android:fontFamily="@font/montserratsemibold"
-            android:padding="12dp"
-            android:textColorHint="@color/purple_Explive"
-            android:textColor="@color/purple_Explive"
-            android:layout_marginTop="16dp"
+            android:layout_below="@id/username"
+            android:layout_marginTop="25dp"
             android:background="@drawable/edittext_background"
-            android:inputType="textPassword"
+            android:fontFamily="@font/montserratsemibold"
+            android:hint="Contraseña"
             android:imeOptions="actionDone"
-            />
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:textColor="@color/purple_Explive"
+            android:textColorHint="@color/purple_Explive" />
 
-        <!-- TextView para el texto '¿Olvidaste tu contraseña?' -->
-        <Button
-            android:id="@+id/forgot_password"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/password"
-            android:layout_alignParentEnd="true"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="¿Olvidaste tu contraseña?"
-            android:textColor="@color/purple_Explive"
-            />
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/login_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+
+                android:fontFamily="@font/montserratsemibold"
+                android:text="Iniciar sesión"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/not_registered"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/buttonbackground"
+                android:fontFamily="@font/montserratsemibold"
+
+                android:text="Registrarse"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+        </LinearLayout>
 
         <!-- Botón para iniciar sesión -->
-        <Button
-            android:id="@+id/login_button"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="Entrar"
-            android:layout_below="@id/forgot_password"
-            android:layout_marginTop="15dp"
-            android:textColor="#FFFFFF"
-            android:textSize="22sp"
-            android:padding="12dp"
-            android:fontFamily="@font/montserratsemibold"
-            android:layout_gravity="center"
-            android:background="@drawable/buttonbackground"/>
+
     </LinearLayout>
 
 </FrameLayout>

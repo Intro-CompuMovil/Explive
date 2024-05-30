@@ -127,7 +127,7 @@ class PerfilUsuario : AppCompatActivity() {
         val userRef = database.child("users").child(uid)
         userRef.child("photoUrl").setValue(url).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Toast.makeText(this, "Photo URL saved successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Foto actualizada correctamente", Toast.LENGTH_SHORT).show()
                 Glide.with(this)
                     .load(url)
                     .into(binding.fperfil)
